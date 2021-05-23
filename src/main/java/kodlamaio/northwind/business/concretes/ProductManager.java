@@ -4,11 +4,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kodlamaio.northwind.business.abstracts.ProductService;
+import kodlamaio.northwind.core.utilities.results.DataResult;
+import kodlamaio.northwind.core.utilities.results.Result;
+import kodlamaio.northwind.core.utilities.results.SuccessDataResult;
+import kodlamaio.northwind.core.utilities.results.SuccessResult;
 import kodlamaio.northwind.dataAccess.abstracts.ProductDao;
 import kodlamaio.northwind.entities.concretes.Product;
 
 @Service
-class ProductManager implements ProductService{
+public class ProductManager implements ProductService{
 
 	private ProductDao productDao;
 	
@@ -18,8 +22,14 @@ class ProductManager implements ProductService{
 	}
 
 	@Override
-	public List<Product> getAll() {
-		return productDao.findAll();
+	public DataResult<List<Product>> getAll() {
+		return new SuccessDataResult<List<Product>>(productDao.findAll(), "Məhsullar listələndi");
+	}
+
+	@Override
+	public Result add(Product product) {
+		productDao.save(product);
+		return new SuccessResult("Məhsul əlavə edildi");
 	}
 
 }
